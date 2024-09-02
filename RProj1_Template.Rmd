@@ -2,10 +2,13 @@
 title: "Hello R"
 author: "Prajwal Parajuli"
 date: "Data 2401"
-output: html_document
+output: 
+  html_document: 
+    fig_width: 10
+    fig_height: 10
+    highlight: monochrome
 ---
 
-MAKE SURE YOU READ AND FOLLOW **ALL** INSTRUCTIONS ON THE INSTRUCTION DOCUMENT. 
 
 ### Load packages
 
@@ -30,7 +33,7 @@ Based on the help file:
 
 First let's plot the data in the dino dataset:
 
-```{r plot-dino, fig.height=3, fig.width=6}
+```{r plot-dino, fig.height=5, fig.width=5}
 dino_data <- datasaurus_dozen %>%
   filter(dataset == "dino")
 ggplot(data = dino_data, mapping = aes(x = x, y = y)) +
@@ -48,7 +51,7 @@ dino_data %>%
 
 Plotting the data in the star dataset.
 
-```{r plot-star, fig.height=3, fig.width=6}
+```{r plot-star, fig.height=5, fig.width=5}
 star_data <- datasaurus_dozen %>%
   filter(dataset == "star")
 ggplot(data = star_data, mapping = aes(x = x, y = y)) +
@@ -67,12 +70,13 @@ star_data %>%
 
 Plotting the circle dataset.
 
-```{r plot-circle, fig.height=3, fig.width=6 }
+```{r plot-circle, fig.height=5, fig.width=5}
 circle_data <- datasaurus_dozen %>%
   filter(dataset == "circle")
 ggplot(data = circle_data, mapping = aes(x = x, y = y)) +
   geom_point()
 ```
+
 Comparing the r value of circle dataset to the dino dataset also indicate very weak negative linear relationship between the variabes and both the r values are very close to each other. 
 
 ```{r}
@@ -83,4 +87,21 @@ circle_data %>%
 
 ### Exercise 5
 
-(Add code and narrative as needed. To add R chunks either type out the backticks, curly braces, and the letter `r` or use the Insert chunk button above, with the green +C.)
+Plotting all the datasets at once. 
+
+```{r}
+ggplot(datasaurus_dozen, aes(x = x, y = y, color = dataset))+ 
+  geom_point()+
+  facet_wrap(~ dataset, ncol = 3) + # facet the dataset variable, in 3 cols
+  theme(legend.position = "none")
+
+```
+
+And calculating their summary correlation coefficients.
+
+```{r}
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+  summarize(r = cor(x, y)) %>%
+  print(13)
+```
